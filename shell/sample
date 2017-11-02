@@ -1,0 +1,5 @@
+#get java pid
+ps -ef | grep java
+
+#open greys
+./greys.sh <PID>[@IP:PORT]

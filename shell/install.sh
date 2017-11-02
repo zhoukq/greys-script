@@ -1,0 +1,1 @@
+curl -sLk http://ompc.oss.aliyuncs.com/greys/install.sh|bash
