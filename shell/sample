@@ -3,3 +3,7 @@ ps -ef | grep java
 
 #open greys
 ./greys.sh <PID>[@IP:PORT]
+
+#xml with js
+#it should always contain CDSSMsg|CDSSXMLCommand and PackString|SendandReceive to make the command work
+js -E .*(CDSSMsg|CDSSXMLCommand|DocumentHelper) PackString|SendandReceive|buildJsonResponse https://raw.githubusercontent.com/zhoukq/greys-script/master/javascript/xml.js
