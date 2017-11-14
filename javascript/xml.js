@@ -121,8 +121,11 @@ require(['greys'], function (greys) {
         if(name == "PackString"){
             return 2;
         }
+        if(name == "UnPackString"){
+            return 3;
+        }
 
-        return 3;
+        return -1;
     }
 
     function getExternalMethodBeforeContent(advice,content){
@@ -140,9 +143,7 @@ require(['greys'], function (greys) {
     }
 
     function getInternalMethodFinishContent(advice, context){
-        if(advice.method.name=="SendandReceive"&&advice.params.length==6){
-            //return "";
-        }
+ 
         methodType = getMethodType(advice.method.name)
         content ="         "
         content +=getCommonContent(advice,context)
@@ -165,7 +166,10 @@ require(['greys'], function (greys) {
             if (advice.isReturning) {
                 content += "return[{0}];".format(advice.returnObj);
             }
-        } else{
+        } else if(methodType==3){
+            content += "receiveMsgLength="+advice.returnObj.length()+";";
+            content += "return[{0}];".format(advice.returnObj);
+        }else{
             content +="\n"
         }
         content += getExceptionInfo(advice)
@@ -192,7 +196,7 @@ require(['greys'], function (greys) {
 
     function finish(output, advice, context) {
         methodType = getMethodType(advice.method.name)
-        if(methodType!=3){
+        if(methodType!=-1){
             output.println(getInternalMethodFinishContent(advice,context))
         }else{
             output.println(getExternalMethodFinishContent(advice,context))
@@ -210,7 +214,7 @@ require(['greys'], function (greys) {
         },
         before: function (output, advice, context) {
             methodType = getMethodType(advice.method.name)
-            if(methodType==3){
+            if(methodType==-1){
                 output.println(getExternalMethodBeforeContent(advice,context));
             }
             context.put(getCostTimeKeyPrefix(advice)+"cost_before",new Date())
